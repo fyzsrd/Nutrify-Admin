@@ -1,13 +1,54 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
+
+
+//layout
+import AuthLayout from '../../layouts/AuthLayout'
+import AdminLayout from '../../layouts/AdminLayout'
+
+
+//auth
 import { LoginPage } from '../../features/auth/pages/LoginPage'
+
+//Admin Layyout Pges
+import DashBoardPage from '../../features/dashboard/pages/DashBoardPage'
+import ProductsPage from '../../features/products/pages/ProductsPage'
+import OrdersPage from '../../features/orders/pages/OrdersPage'
+import CategoriesPage from '../../features/categories/pages/CategoriesPage'
+import BrandsPage from '../../features/brands/pages/BrandsPage'
+import CustomersPage from '../../features/customers/pages/CustomersPage'
+import BannersPage from '../../features/banners/pages/BannersPage'
+import CouponsPage from '../../features/coupons/pages/CouponsPage'
+
+
+
+
+
 
 const AppRoutes = () => {
 
   const AppRouter=createBrowserRouter([
     {
-      path:'/',
-      element:<LoginPage />
+      element:<AuthLayout />,
+      children:[
+        {
+          path:'/',element:<LoginPage />
+        }
+      ]
+    },
+    {
+      element:<AdminLayout />,
+      children:[
+        {path:'/dashboard',element:<DashBoardPage />},
+        {path:'/products',element:<ProductsPage />},
+        {path:'/orders',element:<OrdersPage />},
+        {path:'/categories',element:<CategoriesPage />},
+        {path:'/brands',element: <BrandsPage />},
+        {path:'/customers',element: <CustomersPage />},
+        {path:'/banners',element: <BannersPage />},
+        {path:'/coupons',element: <CouponsPage />},
+
+      ]
     }
   ])
   return (
