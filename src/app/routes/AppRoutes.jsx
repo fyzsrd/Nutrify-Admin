@@ -19,6 +19,7 @@ import BrandsPage from '../../features/brands/pages/BrandsPage'
 import CustomersPage from '../../features/customers/pages/CustomersPage'
 import BannersPage from '../../features/banners/pages/BannersPage'
 import CouponsPage from '../../features/coupons/pages/CouponsPage'
+import ProductDetailPage from '../../features/products/pages/ProductDetailPage'
 
 
 
@@ -40,7 +41,14 @@ const AppRoutes = () => {
       element:<AdminLayout />,
       children:[
         {path:'/dashboard',element:<DashBoardPage />},
-        {path:'/products',element:<ProductsPage />},
+        {
+          path:'/products',
+          // element:<ProductsPage />,
+          children:[
+            { index: true, element: <ProductsPage /> },
+            {path:':id',element:<ProductDetailPage />}
+          ]
+        },
         {path:'/orders',element:<OrdersPage />},
         {path:'/categories',element:<CategoriesPage />},
         {path:'/brands',element: <BrandsPage />},
