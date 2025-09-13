@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import CategoriesTable from './components/CategoriesTable'
-import CategoryAddFormModal from './components/CategoryAddFormModal';
+import CategoriesTable from '../components/CategoriesTable'
+import CategoryAddFormModal from '../components/CategoryAddFormModal';
 
 const CategoriesPage = () => {
 
   const [isModalOpen,setIsModalOpen]=useState(false)
-   const [selectedCategory, setSelectedCategory] = useState(null);
+  //  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleAdd=()=>{
-     setSelectedCategory(null);
+    //  setSelectedCategory(null);
     setIsModalOpen(true)
   }
   

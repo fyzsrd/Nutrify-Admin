@@ -5,10 +5,14 @@ const CategoriesTable = ({categories}) => {
     
 
     return (
-        <div className='bg-white shadow rounded-2xl overflow-auto'>
+         <div className='bg-white shadow rounded-2xl overflow-auto'>
             <table className='w-full '>
                 <thead className='bg-gray-100 text-gray-700 text-left'>
                     <tr>
+                        <th className=' w-12 px-1 py-3 '>SL No.</th>
+                         <th className='px-6 py-3 '>
+                            <input type="checkbox"  className='w-4 h-4'/>
+                         </th>
                         <th className='px-6 py-3 '>Name</th>
                         <th className='px-6 py-3 '>Parent</th>
                         <th className='px-6 py-3 '>Thumbnail</th>
@@ -18,8 +22,12 @@ const CategoriesTable = ({categories}) => {
                     </tr>
                 </thead>
                 <tbody className='divide-y divide-gray-100'>
-                   {categories.map((c)=>(
+                   {categories.map((c,index)=>(
                     <tr key={c._id}>
+                        <td className='px-6 py-3 font-medium'>{index + 1}</td>
+                        <th className='px-6 py-3 text-left '>
+                            <input type="checkbox"  className='w-4 h-4'/>
+                         </th>
                         <td className='px-6 py-3 font-medium'>{c.name}</td>
                         <td className='px-6 py-3'>{c.parentCategory?.name || "-" }</td>
                         <td className='px-6 py-3'>
