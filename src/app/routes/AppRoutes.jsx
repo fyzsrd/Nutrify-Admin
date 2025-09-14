@@ -20,6 +20,8 @@ import CustomersPage from '../../features/customers/pages/CustomersPage'
 import BannersPage from '../../features/banners/pages/BannersPage'
 import CouponsPage from '../../features/coupons/pages/CouponsPage'
 import ProductDetailPage from '../../features/products/pages/ProductDetailPage'
+import ProtectedRoute from './ProtectedRoute'
+import PublicRoute from './PublicRoute'
 
 
 
@@ -28,39 +30,49 @@ import ProductDetailPage from '../../features/products/pages/ProductDetailPage'
 
 const AppRoutes = () => {
 
-  const AppRouter=createBrowserRouter([
+  const AppRouter = createBrowserRouter([
     {
-      element:<AuthLayout />,
-      children:[
+      element: <AuthLayout />,
+      children: [
         {
-          path:'/',element:<LoginPage />
+          path: '/', element:(
+            <PublicRoute >
+              <LoginPage />
+            </PublicRoute>
+             
+            ),
         }
       ]
     },
     {
-      element:<AdminLayout />,
-      children:[
-        {path:'/dashboard',element:<DashBoardPage />},
+      element: (
+        <ProtectedRoute >
+          <AdminLayout />
+        </ProtectedRoute>
+
+      ),
+      children: [
+        { path: '/dashboard', element: <DashBoardPage /> },
         {
-          path:'/products',
+          path: '/products',
           // element:<ProductsPage />,
-          children:[
+          children: [
             { index: true, element: <ProductsPage /> },
-            {path:':id',element:<ProductDetailPage />}
+            { path: ':id', element: <ProductDetailPage /> }
           ]
         },
-        {path:'/orders',element:<OrdersPage />},
-        {path:'/categories',element:<CategoriesPage />},
-        {path:'/brands',element: <BrandsPage />},
-        {path:'/customers',element: <CustomersPage />},
-        {path:'/banners',element: <BannersPage />},
-        {path:'/coupons',element: <CouponsPage />},
+        { path: '/orders', element: <OrdersPage /> },
+        { path: '/categories', element: <CategoriesPage /> },
+        { path: '/brands', element: <BrandsPage /> },
+        { path: '/customers', element: <CustomersPage /> },
+        { path: '/banners', element: <BannersPage /> },
+        { path: '/coupons', element: <CouponsPage /> },
 
       ]
     }
   ])
   return (
-   <RouterProvider router={AppRouter} />
+    <RouterProvider router={AppRouter} />
   )
 }
 

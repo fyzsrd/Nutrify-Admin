@@ -1,13 +1,30 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { loginUser } from "../../../app/store/authSlice";
 
 export const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+
+  const {loading,error}=useSelector((state)=>state.auth);
+
+  const [email, setEmail] = useState("");
+  const [password,setPassword]=useState("");
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    // TODO: Add your login API logic here
-    setTimeout(() => setLoading(false), 2000);
+
+    dispatch(loginUser({email,password}))
+    .unwrap()
+    .then(()=>{
+      navigate('/dashboard') //redirect on success
+    })
+    .catch(()=>{
+        // error is already handled in redux state
+    })
   };
 
   return (
@@ -19,7 +36,9 @@ export const LoginPage = () => {
         <input
           type="email"
           required
-          placeholder="admin@nutrify.com"
+          placeholder="email"
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
           className="w-full px-4 py-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
         />
       </div>
@@ -31,6 +50,9 @@ export const LoginPage = () => {
         <input
           type="password"
           required
+          value={password}
+           onChange={(e) => setPassword(e.target.value)}
+
           placeholder="••••••••"
           className="w-full px-4 py-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
         />
@@ -47,6 +69,8 @@ export const LoginPage = () => {
           Forgot password?
         </a>
       </div>
+
+      {error && <p className="text-red-500 text-sm">{error}</p>}
 
       <button
         type="submit"
