@@ -1,36 +1,41 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import BrandsTable from "../components/BrandsTable"
 import BrandModal from "../components/BrandModal"
 import DeleteConfirmModal from "../components/DeleteConfirmModal"
+import { getBrands } from "../../../api/brandApi"
 
 const BrandsPage = () => {
+  const [brands, setBrands] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState("add") // "add" or "edit"
   const [selectedBrand, setSelectedBrand] = useState(null)
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
-  // Dummy Data
-  const BrandsData = [
-    {
-      _id: "689ac08dcc6ae734c61524bf",
-      name: "Avvatar",
-      logo: "https://example.com/images/avvatar-logo.png",
-      description:
-        "Avvatar is a premium nutrition brand committed to delivering science-backed supplements to fuel your fitness and wellness journey.",
-      fromTheBrand:
-        "At Avvatar, we focus on purity, potency, and performance, helping you achieve your health goals with trusted formulations.",
-    },
-    {
-      _id: "689ac0b6cc6ae734c61524c4",
-      name: "MuscleBlaze",
-      logo: "https://example.com/images/muscleblaze-logo.png",
-      description:
-        "MuscleBlaze is India’s leading sports nutrition brand, offering a wide range of high-quality supplements to help you build muscle and enhance performance.",
-      fromTheBrand:
-        "At MuscleBlaze, we are dedicated to supporting your fitness journey with science-backed products that deliver real results.",
-    },
-  ]
+
+
+  useEffect(()=>{
+    fetBrands();
+  },[])
+
+  const fetBrands=async ()=>{
+    try{
+      setLoading(true)
+      const res= await getBrands();
+      
+      setBrands(res.data.data)
+      
+
+    }catch(err) {
+       console.error(err);
+      setError(err?.response?.data?.message ?? "Failed to fetch brands");
+    }finally {
+      setLoading(false);
+    }
+  }
 
   // Handlers
   const handleAddBrand = () => {
@@ -77,7 +82,7 @@ const BrandsPage = () => {
       </div>
 
       <BrandsTable
-        BrandsData={BrandsData}
+        BrandsData={brands}
         onEdit={handleEditBrand}
         onDelete={handleDeleteBrand}
       />

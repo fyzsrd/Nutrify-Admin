@@ -1,19 +1,15 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
 
-// Login thunk
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const res = await api.post("auth/login", { email, password });
-      return res.data;
-    } catch (err) {
-      const message = err.response?.data?.message || err.message || "Login failed";
-      return rejectWithValue(message);
-    }
+export const loginUser = createAsyncThunk("auth/loginUser", async ({ email, password }, { rejectWithValue }) => {
+  try {
+    const res = await api.post("auth/login", { email, password });
+    return res.data;
+  } catch (err) {
+    const message = err.response?.data?.message || err.message || "Login failed";
+    return rejectWithValue(message);
   }
-);
+});
 
 const initialState = {
   user: null,
@@ -30,7 +26,9 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem("auth");
-      try { delete api.defaults.headers.common["Authorization"]; } catch {}
+      try {
+        delete api.defaults.headers.common["Authorization"];
+      } catch {}
     },
     setAuthFromStorage: (state, action) => {
       state.user = action.payload?.user ?? null;
@@ -39,7 +37,10 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user ?? action.payload;
@@ -47,9 +48,20 @@ const authSlice = createSlice({
         localStorage.setItem("auth", JSON.stringify(action.payload));
         if (action.payload.token) api.defaults.headers.common["Authorization"] = `Bearer ${action.payload.token}`;
       })
-      .addCase(loginUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
 export const { logout, setAuthFromStorage } = authSlice.actions;
 export default authSlice.reducer;
+
+// ✅ Helper for api.js (no Redux store import there)
+export function logoutHelper() {
+  localStorage.removeItem("auth");
+  try {
+    delete api.defaults.headers.common["Authorization"];
+  } catch {}
+}
