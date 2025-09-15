@@ -8,16 +8,18 @@ export const getBrands=()=>api.get('/brand')
 
 
 // Add brand
-// export const addBrand = (formData) =>
-//   api.post("/brands", formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   })
+export const addBrand = (formData) =>
+  api.post("/brand", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  
 
 // Update brand
-// export const updateBrand = (id, formData) =>
-//   api.put(`/brands/${id}`, formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   })
+export const updateBrand = (id, formData) =>
+  api.put(`/brand/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
 
 // Delete brand
-// export const deleteBrand = (id) => api.delete(`/brands/${id}`)
+
+export const deleteBrand = (id) => api.delete(`/brand/${id}`);

@@ -4,7 +4,7 @@ import './App.css'
 import AppRoutes from './routes/AppRoutes'
 import { useEffect,useState  } from 'react';
 import { setAuthFromStorage } from './store/authSlice';
-
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const dispatch=useDispatch();
@@ -23,7 +23,10 @@ function App() {
   
 
   return (
+    <>
     <AppRoutes />
+    <ToastContainer />
+    </>
   )
 }
 

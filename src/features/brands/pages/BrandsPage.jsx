@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react"
 import BrandsTable from "../components/BrandsTable"
 import BrandModal from "../components/BrandModal"
 import DeleteConfirmModal from "../components/DeleteConfirmModal"
-import { getBrands } from "../../../api/brandApi"
+import { getBrands,addBrand,updateBrand, deleteBrand } from "../../../api/brandApi"
+import { toast } from "react-toastify"
 
 const BrandsPage = () => {
   const [brands, setBrands] = useState([]);
@@ -17,22 +18,22 @@ const BrandsPage = () => {
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     fetBrands();
-  },[])
+  }, [])
 
-  const fetBrands=async ()=>{
-    try{
+  const fetBrands = async () => {
+    try {
       setLoading(true)
-      const res= await getBrands();
-      
-      setBrands(res.data.data)
-      
+      const res = await getBrands();
 
-    }catch(err) {
-       console.error(err);
+      setBrands(res.data.data)
+
+
+    } catch (err) {
+      console.error(err);
       setError(err?.response?.data?.message ?? "Failed to fetch brands");
-    }finally {
+    } finally {
       setLoading(false);
     }
   }
@@ -55,18 +56,63 @@ const BrandsPage = () => {
     setIsDeleteOpen(true)
   }
 
-  const handleSave = (formData) => {
-    if (modalMode === "add") {
-      console.log("Adding brand:", formData)
-    } else {
-      console.log("Updating brand:", formData)
+  // const handleSave = (formData) => {
+  //   if (modalMode === "add") {
+  //     console.log("Adding brand:", formData)
+  //   } else {
+  //     console.log("Updating brand:", formData)
+  //   }
+  //   setIsModalOpen(false)
+  // }
+
+  const handleSave =async (formData) => {
+    try {
+      setLoading(true)
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("description", formData.description);
+      data.append("fromTheBrand", formData.fromTheBrand);
+      if (formData.logo) {
+        data.append("logo", formData.logo);
+      }
+
+      if(modalMode === 'add'){
+        await addBrand(data)
+        toast.success("Brand added successfully");
+      }else{
+        await updateBrand(selectedBrand._id,data);
+         toast.success("Brand updated successfully");
+      }
+
+      await fetBrands();
+      setIsModalOpen(false);
+
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.response?.data?.message ?? "Save failed");
+
+    } finally {
+      setLoading(false);
     }
-    setIsModalOpen(false)
   }
 
-  const confirmDelete = () => {
-    console.log("Deleting brand:", selectedBrand)
-    setIsDeleteOpen(false)
+  const confirmDelete = async () => {
+
+    try {
+      setLoading(true);
+      await deleteBrand(selectedBrand._id);
+      await fetBrands();
+      setIsDeleteOpen(false)
+      toast.success("Brand deleted successfully");
+
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.response?.data?.message ?? "Delete failed")
+      //alert(err?.response?.data?.message ?? "Delete failed");
+      setIsDeleteOpen(false)
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -93,6 +139,7 @@ const BrandsPage = () => {
           initialData={selectedBrand}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSave}
+          loading={loading}
         />
       )}
 

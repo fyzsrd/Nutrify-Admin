@@ -29,7 +29,7 @@ api.interceptors.request.use((config) => {
 
     if (decoded?.exp && decoded.exp < now) {
       logoutHelper(); // ✅ use helper instead of dispatching from here
-      window.location.href = "/login";
+      window.location.href = "/"; //make location correct
       return Promise.reject(new Error("Token expired. Please login again."));
     }
 
