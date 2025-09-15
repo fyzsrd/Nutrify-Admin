@@ -4,6 +4,7 @@ import BrandModal from "../components/BrandModal"
 import DeleteConfirmModal from "../components/DeleteConfirmModal"
 import { getBrands,addBrand,updateBrand, deleteBrand } from "../../../api/brandApi"
 import { toast } from "react-toastify"
+import BrandsTableShimmer from "../components/BrandsTableShimmer"
 
 const BrandsPage = () => {
   const [brands, setBrands] = useState([]);
@@ -29,10 +30,10 @@ const BrandsPage = () => {
 
       setBrands(res.data.data)
 
-
     } catch (err) {
       console.error(err);
       setError(err?.response?.data?.message ?? "Failed to fetch brands");
+      toast.error(error)
     } finally {
       setLoading(false);
     }
@@ -115,42 +116,51 @@ const BrandsPage = () => {
     }
   }
 
+
+ 
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Brands</h1>
-        <button
-          onClick={handleAddBrand}
-          className="bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600"
-        >
-          + Add Brand
-        </button>
-      </div>
+    <div className="flex justify-between items-center mb-6">
+      <h1 className="text-2xl font-bold">Brands</h1>
+      <button
+        onClick={handleAddBrand}
+        className="bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600"
+      >
+        + Add Brand
+      </button>
+    </div>
 
+    {loading ? (
+      <BrandsTableShimmer />
+    ) : brands.length === 0 ? (
+      <p className="text-gray-500 text-center py-10">No brands available</p>
+    ) : (
       <BrandsTable
         BrandsData={brands}
         onEdit={handleEditBrand}
         onDelete={handleDeleteBrand}
       />
+    )}
 
-      {isModalOpen && (
-        <BrandModal
-          mode={modalMode}
-          initialData={selectedBrand}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSave}
-          loading={loading}
-        />
-      )}
+    {isModalOpen && (
+      <BrandModal
+        mode={modalMode}
+        initialData={selectedBrand}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSave}
+        loading={loading}
+      />
+    )}
 
-      {isDeleteOpen && (
-        <DeleteConfirmModal
-          brand={selectedBrand}
-          onCancel={() => setIsDeleteOpen(false)}
-          onConfirm={confirmDelete}
-        />
-      )}
-    </div>
+    {isDeleteOpen && (
+      <DeleteConfirmModal
+        brand={selectedBrand}
+        onCancel={() => setIsDeleteOpen(false)}
+        onConfirm={confirmDelete}
+      />
+    )}
+  </div>
   )
 }
 
