@@ -57,14 +57,7 @@ const BrandsPage = () => {
     setIsDeleteOpen(true)
   }
 
-  // const handleSave = (formData) => {
-  //   if (modalMode === "add") {
-  //     console.log("Adding brand:", formData)
-  //   } else {
-  //     console.log("Updating brand:", formData)
-  //   }
-  //   setIsModalOpen(false)
-  // }
+
 
   const handleSave =async (formData) => {
     try {
@@ -158,6 +151,7 @@ const BrandsPage = () => {
         brand={selectedBrand}
         onCancel={() => setIsDeleteOpen(false)}
         onConfirm={confirmDelete}
+        loading={loading}
       />
     )}
   </div>
