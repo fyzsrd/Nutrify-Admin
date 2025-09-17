@@ -1,39 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductsTable from '../components/ProductsTable'
+import { getProducts } from '../../../api/productApi'
+import ProductsTableShimmer from '../components/ProductsTableShimmer'
+import noProductsFound from '../../../assets/json/WjhEybDM3L.json'
+import Lottie from 'lottie-react'
 
 const ProductsPage = () => {
-  const productsData = [
-    {
-      _id: "68b837c97ff80b82fba4ec31",
-      name: "One Science Premium Whey Protein",
-      slug: "one-science-premium-whey-protein",
-      category: "Whey Protien",
-      variants:10,
-      isPromoted: true,
-      isActive: false,
-      images: [
-        "https://example.com/images/osn-premium-whey-front.jpg",
-      ],
-      thumbnail: [
-        "https://fitnesstack.com/wp-content/uploads/2024/03/One-Science-ISO-Gold-Whey-5-Lbs-Chocolate-Charge.png",
-      ],
-      defaultPrice: 2949,
-    },
-    {
-      _id: "68b9a7cf985ff4e17d536f75",
-      name: "Optimum Nutrition BCAA 5000 Powder",
-      slug: "optimum-nutrition-bcaa-5000-powder",
-      category: "BCAA",
-      variants:1,
-      isPromoted: true,
-      isActive: true,
-      images: [],
-      thumbnail: [
-        "https://fitnesstack.com/wp-content/uploads/2024/03/Optimum-Nutrition-BCAA-5000-Powder-Fruit-Punch-30-Servings.jpg",
-      ],
-      defaultPrice: 1149,
-    },
-  ];
+  const [loading, setLoading] = useState(false)
+  const [productsData, setProductsData] = useState([])
+
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+  const fetchProducts = async () => {
+    try {
+      setLoading(true)
+      const res = await getProducts()
+      setProductsData(res.data.data)
+      
+
+    } catch (err) {
+      console.error(err)
+    }
+    finally {
+
+      setLoading(false)
+    }
+  }
+
+
+
+
   return (
     <div>
       <div className='flex justify-between items-center mb-6'>
@@ -43,7 +41,18 @@ const ProductsPage = () => {
         >+ Add Products</button>
       </div>
 
-      <ProductsTable productsData={productsData}/>
+      {loading ? <ProductsTableShimmer /> : productsData.length === 0 ? (
+        <div className='flex flex-col items-center justify-center py-20 bg-gray-50 rounded-lg shadow'>
+        
+         <Lottie animationData={noProductsFound} loop={true}  className='w-40 h-40 mb-4 opacity-90'/>
+          <h2 className='text-lg font-semibold text-gray-600'>Noproducts Found</h2>
+          <p className='text-gray-600 text-sm mt-1'>start adding products </p>
+          <button
+          className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600'> + add products</button>
+        </div>
+      ):(
+        <ProductsTable productsData={productsData} />
+      )}
 
     </div>
   )
