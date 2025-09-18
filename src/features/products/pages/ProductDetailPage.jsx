@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
 import VariantsTable from "../components/VariantsTable";
+import ProductDetailsCard from "../components/ProductDetailsCard";
+import ImagesGrid from "../components/ImagesGrid";
 
 const ProductDetailPage = () => {
   const [activeTab, setActiveTab] = useState("product");
@@ -72,12 +74,21 @@ const ProductDetailPage = () => {
         </button>
 
       </div>
-      <div className="space-y-4">
-        <ProductCard product={product} />
-        <VariantsTable variants={product.variants}/>
-      </div>
 
-      <h1>ddd</h1>
+          {activeTab === "product" && (
+        <div className="space-y-6">
+          <ProductCard product={product} />
+          <VariantsTable variants={product.variants} />
+        </div>
+      )}
+
+      
+      {activeTab === "images" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+          <ImagesGrid images={product.images} />
+          <ProductDetailsCard productData={product} />
+        </div>
+      )}
 
 
     </div>
