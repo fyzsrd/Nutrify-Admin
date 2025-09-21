@@ -5,6 +5,7 @@ import ProductsTableShimmer from '../components/ProductsTableShimmer'
 import noProductsFound from '../../../assets/json/WjhEybDM3L.json'
 import Lottie from 'lottie-react'
 import ProductModal from '../components/ProductModal'
+import { toast } from 'react-toastify'
 
 const ProductsPage = () => {
   const [loading, setLoading] = useState(false)
@@ -44,8 +45,10 @@ const ProductsPage = () => {
 
       // refresh products after adding
       await fetchProducts();
+      toast.success("susses")
     } catch (err) {
       console.error(err);
+      toast.error("failed")
     } finally {
       setLoading(false);
     }

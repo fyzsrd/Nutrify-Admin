@@ -1,7 +1,15 @@
 import React from 'react'
 
 const ImagesGrid = ({images}) => {
-    console.log(images)
+  
+   if (!images.length) {
+    return (
+      <div className="bg-white shadow rounded-xl p-6 text-gray-500">
+        No images available
+      </div>
+    );
+  }
+    // console.log(images)
   return (
     <div className="bg-white shadow rounded-xl p-6 w-full">
       <h2 className="text-lg font-semibold mb-4">Product Images</h2>

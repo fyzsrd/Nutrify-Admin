@@ -1,6 +1,13 @@
 import React from 'react'
 
 const ProductDetailsCard = ({productData}) => {
+   if (!productData.length && !productData) {
+    return (
+      <div className="bg-white shadow rounded-xl p-6 text-gray-500">
+        No variants available
+      </div>
+    );
+  }
   return (
      <div className="bg-white shadow rounded-xl p-6 space-y-3">
       <h2 className="text-lg font-semibold">Product Details</h2>

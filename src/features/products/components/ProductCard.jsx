@@ -1,6 +1,15 @@
 import React from "react";
 
 const ProductCard = ({ product }) => {
+   if (!product || !product._id) {
+    return (
+      <div className="bg-white shadow rounded-xl p-6 text-gray-500">
+        Loading product details...
+      </div>
+    );
+  }
+
+  
   return (
     <div className="bg-white shadow rounded-xl p-6 flex gap-6">
       <img

@@ -92,7 +92,7 @@ const AddProductModal = ({ isOpen, onClose, onSave, getFormData }) => {
   }
 
   onSave(data);
-  onClose();
+  
 };
 
   useEffect(() => {

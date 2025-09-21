@@ -69,7 +69,7 @@ const ProductsTable = ({ productsData }) => {
                   </span>
                 )}
               </td>
-              <td className="px-3 py-3 font-semibold">₹ {p.defaultPrice}</td>
+              <td className="px-3 py-3 font-semibold">₹ {p.defaultPrice || '-' }</td>
               <td className="px-3 py-3">
                 <NavLink to={`/products/${p._id}`} >
                   <button className="px-3 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600">
