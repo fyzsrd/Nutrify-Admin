@@ -9,10 +9,12 @@ import ProductCardShimmer from "../components/ProductCardShimmer ";
 import VariantsTableShimmer from "../components/VariantsTableShimmer ";
 import ImagesGridShimmer from "../components/ImagesGridShimmer";
 import ProductDetailsCardShimmer from "../components/ProductDetailsCardShimmer ";
+import AddVariantModal from "../components/AddVariantModal";
 
 const ProductDetailPage = () => {
   const { id } = useParams()
   const [loading, setLoading] = useState(true);
+  const [variantModal,setVariantModal]=useState(false)
   const [activeTab, setActiveTab] = useState("product");
   const [productDetails, setProductDetails] = useState({
     variants: [],
@@ -41,6 +43,12 @@ const ProductDetailPage = () => {
     }
 
   }
+
+  const handleAddVariant=()=>{
+    setVariantModal(true)
+
+  }
+
 
 
   return (
@@ -80,7 +88,7 @@ const ProductDetailPage = () => {
               <>
                 <ProductCard product={productDetails} />
 
-                <VariantsTable variants={productDetails.variants} />
+                <VariantsTable variants={productDetails.variants} addVariant={handleAddVariant}/>
               </>
             )}
 
@@ -108,6 +116,7 @@ const ProductDetailPage = () => {
       )}
 
 
+      {variantModal && (<AddVariantModal onClose={()=>setVariantModal(false)} />)}
     </div>
   );
 };

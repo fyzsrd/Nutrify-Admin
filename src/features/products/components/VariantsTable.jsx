@@ -2,14 +2,16 @@ import React from "react";
 import noProductsFound from '../../../assets/json/WjhEybDM3L.json'
 import Lottie from "lottie-react";
 
-const VariantsTable = ({ variants }) => {
+const VariantsTable = ({ variants,addVariant }) => {
   if (!variants || variants.length === 0) {
     return (
       <div className="bg-white shadow rounded-xl p-6 text-center text-gray-500 flex flex-col justify-center items-center">
         <Lottie animationData={noProductsFound} loop={true} className='w-40 h-40 mb-4 opacity-90' />
         <p className="text-lg font-medium">No variants added yet</p>
         <p className="text-sm text-gray-400 mt-1">Start by adding a new variant</p>
-        <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        <button
+        onClick={addVariant}
+         className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
           + Add Variant
         </button>
       </div>
@@ -21,7 +23,9 @@ const VariantsTable = ({ variants }) => {
     <div className="bg-white shadow rounded-xl p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Variants</h2>
-        <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        <button
+        onClick={addVariant}
+         className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
           + Add Variant
         </button>
       </div>
