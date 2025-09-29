@@ -1,8 +1,11 @@
 
 import React, { useState } from "react";
-import axios from "axios";
+import { addVariant } from "../api/variantApi";
+import { toast } from "react-toastify";
 
-const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
+
+const AddVariantModal = ({ productId, onClose,onVariantAdded }) => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     weight: "",
     weightType: "kg",
@@ -16,6 +19,8 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
     image: "", // single image
   });
 
+  const [preview, setPreview] = useState(null)
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -25,7 +30,12 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
   };
 
   const handleImageChange = (e) => {
-    setFormData((prev) => ({ ...prev, image: e.target.value }));
+    const file = e.target.files[0]
+    setFormData((prev) => ({ ...prev, image: file }));
+    if (file) {
+      setPreview(URL.createObjectURL(file))
+    }
+
   };
 
   const removeImage = () => {
@@ -34,22 +44,42 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return
+    setLoading(true)
     try {
-      const payload = { 
-        productId, 
-        ...formData, 
-        images: formData.image ? [formData.image] : [] 
-      };
 
-      const res = await axios.post("/api/variants", payload);
+      const formDataToSend = new FormData();
+      formDataToSend.append("productId", productId);
+      formDataToSend.append("weight", formData.weight);
+      formDataToSend.append("weightType", formData.weightType);
+      formDataToSend.append("flavor", formData.flavor);
+      formDataToSend.append("mrp", formData.mrp);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("stock", formData.stock);
+      formDataToSend.append("isBestSeller", formData.isBestSeller);
+      formDataToSend.append("isDefault", formData.isDefault);
 
-      if (res.data.status) {
-        onVariantAdded(res.data.data);
-        onClose();
+      if (formData.image) {
+        formDataToSend.append("images", formData.image);
       }
+
+
+
+      const res = await addVariant(formDataToSend)
+      console.log("variant saved saved:", res.data);
+      toast.success("Variant saved successfully");
+       if (onVariantAdded) {
+        onVariantAdded();
+      }
+      onClose()
+     
     } catch (err) {
       console.error(err.response?.data || err.message);
-      alert("Error adding variant: " + err.message);
+      toast.error("Error adding variant ❌");
+      
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -128,18 +158,7 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
             </div>
           </div>
 
-          {/* SKU */}
-          <div>
-            <label className="block text-sm font-medium">SKU *</label>
-            <input
-              name="sku"
-              type="text"
-              value={formData.sku}
-              onChange={handleChange}
-              className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+
 
           {/* Stock */}
           <div>
@@ -179,20 +198,24 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
 
           {/* Single Image */}
           <div>
+
             <label className="block text-sm font-medium">Image *</label>
             {!formData.image ? (
               <input
-                type="url"
+                type="file"
                 placeholder="Enter image URL"
                 value={formData.image}
                 onChange={handleImageChange}
-                className="w-full mt-1 border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+                //file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700
+                className="w-full mt-1 border rounded-lg p-1 text-gray-500 border-gray-300 focus:ring-2
+                 focus:ring-blue-500 file:px-2 file:bg-blue-600 file:border-0 file:py-2 file:rounded-lg
+                 file:text-white"
                 required
               />
             ) : (
               <div className="mt-2 relative w-40">
                 <img
-                  src={formData.image}
+                  src={preview}
                   alt="Preview"
                   className="w-40 h-40 object-cover rounded-lg border"
                 />
@@ -218,9 +241,14 @@ const AddVariantModal = ({ productId, onClose, onVariantAdded }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              disabled={loading}
+              className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
-              Save Variant
+              {loading && (
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              )}
+              {loading ? "Saving..." : "Save Variant"}
             </button>
           </div>
         </form>

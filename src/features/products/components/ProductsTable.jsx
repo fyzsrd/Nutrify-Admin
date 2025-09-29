@@ -14,17 +14,17 @@ const ProductsTable = ({ productsData }) => {
             <th className='px-6 py-3 '>
               <input type="checkbox" className='w-4 h-4' />
             </th>
-            <th className='px-6 py-3'>Product Name</th>
-            <th className='px-6 py-3'>images</th>
-            <th className='px-6 py-3'>slug</th>
-            <th className='px-6 py-3'>Variants</th>
-            <th className='px-6 py-3'>Brand</th>
-            <th className='px-6 py-3'>category</th>
-            <th className='px-6 py-3'>isPromoted</th>
-            <th className='px-6 py-3'>isActive</th>
+            <th className='px-6 py-3 text-left'>Product Name</th>
+            <th className='px-6 py-3 text-left'>images</th>
+            <th className='px-6 py-3 text-left'>slug</th>
+            <th className='px-6 py-3 text-left'>Variants</th>
+            <th className='px-6 py-3 text-left'>Brand</th>
+            <th className='px-6 py-3 text-left'>category</th>
+            <th className='px-6 py-3 text-left'>isPromoted</th>
+            <th className='px-6 py-3 text-left'>isActive</th>
 
-            <th className='px-6 py-3'>defaultPrice</th>
-            <th className='px-6 py-3'>details</th>
+            <th className='px-6 py-3 text-left'>defaultPrice</th>
+            <th className='px-6 py-3 text-left'>details</th>
 
           </tr>
         </thead>
@@ -69,7 +69,8 @@ const ProductsTable = ({ productsData }) => {
                   </span>
                 )}
               </td>
-              <td className="px-3 py-3 font-semibold">₹ {p.defaultPrice || '-' }</td>
+              {/* <td className="px-3 py-3 font-semibold">₹ { + p.defaultPrice || 'h' }</td> */}
+              <td className="px-3 py-3 font-semibold"> {p.defaultPrice ? `₹ ${p.defaultPrice}` : "no Variants"}</td>
               <td className="px-3 py-3">
                 <NavLink to={`/products/${p._id}`} >
                   <button className="px-3 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600">

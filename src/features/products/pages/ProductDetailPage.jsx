@@ -14,7 +14,7 @@ import AddVariantModal from "../components/AddVariantModal";
 const ProductDetailPage = () => {
   const { id } = useParams()
   const [loading, setLoading] = useState(true);
-  const [variantModal,setVariantModal]=useState(false)
+  const [variantModal, setVariantModal] = useState(false)
   const [activeTab, setActiveTab] = useState("product");
   const [productDetails, setProductDetails] = useState({
     variants: [],
@@ -44,9 +44,18 @@ const ProductDetailPage = () => {
 
   }
 
-  const handleAddVariant=()=>{
+  const handleAddVariant = () => {
     setVariantModal(true)
 
+  }
+
+  const handleVariantAdded = () => {
+
+    fetchProductDetail();
+  };
+
+  const handeleVariantChange=()=>{
+    fetchProductDetail();
   }
 
 
@@ -88,7 +97,11 @@ const ProductDetailPage = () => {
               <>
                 <ProductCard product={productDetails} />
 
-                <VariantsTable variants={productDetails.variants} addVariant={handleAddVariant}/>
+                <VariantsTable 
+                variants={productDetails.variants}
+                 addVariant={handleAddVariant} 
+                 onVariantDeleted={handeleVariantChange}
+                  />
               </>
             )}
 
@@ -116,7 +129,11 @@ const ProductDetailPage = () => {
       )}
 
 
-      {variantModal && (<AddVariantModal onClose={()=>setVariantModal(false)} />)}
+      {variantModal && (<AddVariantModal
+        onClose={() => setVariantModal(false)}
+        onVariantAdded={handleVariantAdded}
+        productId={id} />
+      )}
     </div>
   );
 };
