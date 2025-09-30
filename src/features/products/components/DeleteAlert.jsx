@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VariantDeleteAlert = ({ onCancel, onConfirm,processing }) => {
+const DeleteAlert = ({ onCancel, onConfirm,processing }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -28,4 +28,4 @@ const VariantDeleteAlert = ({ onCancel, onConfirm,processing }) => {
   );
 };
 
-export default VariantDeleteAlert;
+export default DeleteAlert;

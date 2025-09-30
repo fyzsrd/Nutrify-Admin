@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import noProductsFound from '../../../assets/json/WjhEybDM3L.json'
 import Lottie from "lottie-react";
-import VariantDeleteAlert from "./VariantDeleteAlert";
+import DeleteAlert from "./DeleteAlert";
 import { deleteVariant } from "../api/variantApi";
 import { toast } from "react-toastify";
 
@@ -73,7 +73,7 @@ const VariantsTable = ({ variants,addVariant,onVariantDeleted }) => {
     <div className="bg-white shadow rounded-xl p-6">
 
       {showConfirm && (
-  <VariantDeleteAlert
+  <DeleteAlert
   processing={processing}
     onCancel={() => setShowConfirm(false)}
     onConfirm={handleDelete}

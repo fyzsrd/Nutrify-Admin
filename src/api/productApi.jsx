@@ -9,4 +9,4 @@ export const addProduct = (formData) =>
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-export const deleteProduct=(id)=>api.get(`/product/${id}`)
+export const deleteProduct=(id)=>api.delete(`/product/${id}`)

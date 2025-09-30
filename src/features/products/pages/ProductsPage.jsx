@@ -32,6 +32,10 @@ const ProductsPage = () => {
     }
   }
 
+  const handelReload=()=>{
+    fetchProducts()
+
+  }
 
 
 
@@ -76,7 +80,7 @@ const ProductsPage = () => {
             className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600'> + add products</button>
         </div>
       ) : (
-        <ProductsTable productsData={productsData} />
+        <ProductsTable productsData={productsData} handelReload={handelReload} />
       )}
 
       {isModalOpen && (
