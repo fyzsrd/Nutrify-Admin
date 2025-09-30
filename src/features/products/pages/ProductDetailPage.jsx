@@ -1,57 +1,139 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import VariantsTable from "../components/VariantsTable";
+import ProductDetailsCard from "../components/ProductDetailsCard";
+import ImagesGrid from "../components/ImagesGrid";
+import { getProductDetails } from "../../../api/productApi";
 import { useParams } from "react-router";
-
+import ProductCardShimmer from "../components/ProductCardShimmer ";
+import VariantsTableShimmer from "../components/VariantsTableShimmer ";
+import ImagesGridShimmer from "../components/ImagesGridShimmer";
+import ProductDetailsCardShimmer from "../components/ProductDetailsCardShimmer ";
+import AddVariantModal from "../components/AddVariantModal";
 
 const ProductDetailPage = () => {
-  const { id } = useParams(); // product id from URL
+  const { id } = useParams()
+  const [loading, setLoading] = useState(true);
+  const [variantModal, setVariantModal] = useState(false)
+  const [activeTab, setActiveTab] = useState("product");
+  const [productDetails, setProductDetails] = useState({
+    variants: [],
+    images: [],
+    brand: {},
+    category: {},
+  })
 
-  // mock data
-  const product = {
-    _id: id,
-    name: "Gold Standard Whey",
-    variants: [
-      { _id: "v1", weight: "2lb", flavor: "Chocolate", price: 2999, stock: 10 },
-      { _id: "v2", weight: "5lb", flavor: "Vanilla", price: 5999, stock: 5 },
-    ],
+
+
+
+  useEffect(() => {
+    fetchProductDetail()
+  }, [])
+
+  const fetchProductDetail = async () => {
+    try {
+      const res = await getProductDetails(id)
+      setProductDetails(res.data.data)
+
+
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false);
+    }
+
+  }
+
+  const handleAddVariant = () => {
+    setVariantModal(true)
+
+  }
+
+  const handleVariantAdded = () => {
+
+    fetchProductDetail();
   };
 
+  const handeleVariantChange=()=>{
+    fetchProductDetail();
+  }
+
+
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">{product.name} - Variants</h1>
+    <div className="space-y-6 bg-blue-50">
+      {/* Tabs Header */}
 
-      <button className="mb-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-        + Add Variant
-      </button>
+      <div className="flex gap-4 border-b ">
+        <button
+          onClick={() => setActiveTab("product")}
+          className={`px-4 py-2 font-medium ${activeTab === "product"
+            ? "border-b-2 border-blue-500 text-blue-600"
+            : "text-gray-600"
+            }`} >
+          product</button>
 
-      <table className="w-full bg-white shadow rounded-2xl overflow-hidden">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="px-6 py-3">Weight</th>
-            <th className="px-6 py-3">Flavor</th>
-            <th className="px-6 py-3">Price</th>
-            <th className="px-6 py-3">Stock</th>
-            <th className="px-6 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {product.variants.map((v) => (
-            <tr key={v._id} className="border-t">
-              <td className="px-6 py-3">{v.weight}</td>
-              <td className="px-6 py-3">{v.flavor}</td>
-              <td className="px-6 py-3">₹{v.price}</td>
-              <td className="px-6 py-3">{v.stock}</td>
-              <td className="px-6 py-3">
-                <button className="px-3 py-1 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 mr-2">
-                  Edit
-                </button>
-                <button className="px-3 py-1 bg-red-500 text-white rounded-lg text-xs hover:bg-red-600">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <button
+          onClick={() => setActiveTab("images")}
+          className={`px-4 py-2 font-medium ${activeTab === "images"
+            ? "border-b-2 border-blue-500 text-blue-600"
+            : "text-gray-600"
+            }`}
+        >
+          Images & Details
+        </button>
+
+      </div>
+
+      {activeTab === "product" && (
+        <div className="space-y-6">
+          {loading ?
+            (
+              <>
+                <ProductCardShimmer />
+                <VariantsTableShimmer />
+              </>
+            ) : (
+              <>
+                <ProductCard product={productDetails} />
+
+                <VariantsTable 
+                variants={productDetails.variants}
+                 addVariant={handleAddVariant} 
+                 onVariantDeleted={handeleVariantChange}
+                  />
+              </>
+            )}
+
+
+        </div>
+      )}
+
+
+      {activeTab === "images" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+          {loading ? (
+            <>
+              <ImagesGridShimmer />
+              <ProductDetailsCardShimmer />
+            </>
+          ) : (
+            <>
+              <ImagesGrid images={productDetails.images} />
+
+              <ProductDetailsCard productData={productDetails} />
+            </>
+          )}
+
+        </div>
+      )}
+
+
+      {variantModal && (<AddVariantModal
+        onClose={() => setVariantModal(false)}
+        onVariantAdded={handleVariantAdded}
+        productId={id} />
+      )}
     </div>
   );
 };
