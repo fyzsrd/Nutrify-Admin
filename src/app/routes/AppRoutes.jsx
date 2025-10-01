@@ -22,6 +22,7 @@ import CouponsPage from '../../features/coupons/pages/CouponsPage'
 import ProductDetailPage from '../../features/products/pages/ProductDetailPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoute'
+import UserDetails from '../../features/customers/pages/UserDetails'
 
 
 
@@ -35,12 +36,12 @@ const AppRoutes = () => {
       element: <AuthLayout />,
       children: [
         {
-          path: '/', element:(
+          path: '/', element: (
             <PublicRoute >
               <LoginPage />
             </PublicRoute>
-             
-            ),
+
+          ),
         }
       ]
     },
@@ -55,7 +56,7 @@ const AppRoutes = () => {
         { path: '/dashboard', element: <DashBoardPage /> },
         {
           path: '/products',
-          // element:<ProductsPage />,
+
           children: [
             { index: true, element: <ProductsPage /> },
             { path: ':id', element: <ProductDetailPage /> }
@@ -64,7 +65,15 @@ const AppRoutes = () => {
         { path: '/orders', element: <OrdersPage /> },
         { path: '/categories', element: <CategoriesPage /> },
         { path: '/brands', element: <BrandsPage /> },
-        { path: '/customers', element: <CustomersPage /> },
+        {
+          path: '/customers',
+
+          children: [
+            { index: true, element: <CustomersPage /> },
+            { path: ':id', element: <UserDetails /> }
+
+          ]
+        },
         { path: '/banners', element: <BannersPage /> },
         { path: '/coupons', element: <CouponsPage /> },
 
