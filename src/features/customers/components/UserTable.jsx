@@ -1,25 +1,9 @@
 import React from 'react'
 import { NavLink } from 'react-router'
 
-const UserTable = () => {
-    const userData = [
-        {
-            id:1,
-            name: "Fayaz",
-            Mobile: "94111141139",
-            isVerified: true,
-            isBlocked: false,
-
-        },
-        {
-            id:2,
-            name: "sardar",
-            Mobile: "63132128528",
-            isVerified: false,
-            isBlocked: true,
-
-        }
-    ]
+const UserTable = ({usersData}) => {
+ 
+   
 
     return (
         <div className='overflow-x-auto'>
@@ -38,14 +22,14 @@ const UserTable = () => {
     </tr>
   </thead>
   <tbody>
-    {userData.map((user, index) => (
-      <tr key={user.id} className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition">
+    {usersData.map((user, index) => (
+      <tr key={user._id} className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition">
         <td className="px-4 py-2">
           <input type="checkbox" />
         </td>
         <td className="px-4 py-2">{index + 1}</td>
-        <td className="px-4 py-2">{user.Mobile}</td>
-        <td className="px-4 py-2">{user.name}</td>
+        <td className="px-4 py-2">{user.phoneNumber}</td>
+        <td className="px-4 py-2">{user.firstName}</td>
         <td className="px-4 py-2">
           {user.isVerified ? (
             <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
@@ -59,12 +43,12 @@ const UserTable = () => {
         </td>
         <td className="px-4 py-2">
           {user.isBlocked ? (
-            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-              Yes
+            <span className=" items-center text-xs font-medium rounded-full  text-red-800">
+              Blocked
             </span>
           ) : (
-            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-              No
+            <span className=" items-center text-xs font-medium rounded-full text-green-800">
+              Active
             </span>
           )}
         </td>
