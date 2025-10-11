@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import CategoriesTable from "../components/CategoriesTable";
 import CategoryModal from "../components/CategoryModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
-import { getCategory, addCategory, updateCategory, deleteCategory } from "../../../api/CategoryApi";
+import { getCategory, addCategory, updateCategory, deleteCategory } from "../../../api/categoryApi";
 import { toast } from "react-toastify";
 
 const CategoriesPage = () => {
