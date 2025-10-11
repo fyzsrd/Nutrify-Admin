@@ -44,16 +44,18 @@ const ProductsPage = () => {
       setLoading(true);
       console.log(formData)
       for (let [k, v] of formData.entries()) console.log(k, v);
-      const res = await addProduct(formData);
-      console.log("Product saved:", res.data);
-
+       await addProduct(formData);
+      
       // refresh products after adding
       await fetchProducts();
+      
       toast.success("susses")
+       setIsModalOpen(false)
     } catch (err) {
       console.error(err);
-      toast.error("failed")
+      toast.error("failed",err.message)
     } finally {
+     
       setLoading(false);
     }
   };
@@ -61,7 +63,7 @@ const ProductsPage = () => {
 
 
   return (
-    <div>
+    <div className='max-h-screen '>
       <div className='flex justify-between items-center mb-6'>
         <h1 className='text-2xl font-bold'>Products</h1>
         <button
@@ -88,6 +90,7 @@ const ProductsPage = () => {
 
           isOpen={isModalOpen}
           onSave={handleSave}
+          loading={loading}
           onClose={() => setIsModalOpen(false)} />
 
       )}

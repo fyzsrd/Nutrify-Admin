@@ -56,7 +56,7 @@ const ProductsTable = ({ productsData ,handelReload }) => {
 
 
   return (
-    <div className='bg-gray-50 shadow overflow-auto'>
+    <div className='flex-1 overflow-auto shadow bg-gray-50 rounded'>
       {showConfirm && (
         <DeleteAlert
           processing={processing}
